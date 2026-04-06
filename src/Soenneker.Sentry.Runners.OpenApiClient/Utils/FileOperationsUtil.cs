@@ -5,7 +5,6 @@ using Soenneker.Git.Util.Abstract;
 using Soenneker.Sentry.Runners.OpenApiClient.Utils.Abstract;
 using Soenneker.Utils.Dotnet.Abstract;
 using Soenneker.Utils.Environment;
-using Soenneker.Utils.Process.Abstract;
 using System;
 using System.IO;
 using System.Linq;
@@ -17,7 +16,6 @@ using Soenneker.OpenApi.Fixer.Abstract;
 using Soenneker.Utils.Directory.Abstract;
 using Soenneker.Utils.File.Abstract;
 using Soenneker.Utils.File.Download.Abstract;
-using Soenneker.Utils.Yaml.Abstract;
 using System.Collections.Generic;
 
 namespace Soenneker.Sentry.Runners.OpenApiClient.Utils;
@@ -34,11 +32,9 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
     private readonly IFileDownloadUtil _fileDownloadUtil;
     private readonly IFileUtil _fileUtil;
     private readonly IDirectoryUtil _directoryUtil;
-    private readonly IYamlUtil _yamlUtil;
 
     public FileOperationsUtil(ILogger<FileOperationsUtil> logger, IConfiguration configuration, IGitUtil gitUtil, IDotnetUtil dotnetUtil,
-        IFileDownloadUtil fileDownloadUtil, IFileUtil fileUtil, IDirectoryUtil directoryUtil, IKiotaUtil kiotaUtil, IOpenApiFixer openApiFixer,
-        IYamlUtil yamlUtil)
+        IFileDownloadUtil fileDownloadUtil, IFileUtil fileUtil, IDirectoryUtil directoryUtil, IKiotaUtil kiotaUtil, IOpenApiFixer openApiFixer)
     {
         _logger = logger;
         _configuration = configuration;
@@ -49,7 +45,6 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
         _fileDownloadUtil = fileDownloadUtil;
         _fileUtil = fileUtil;
         _directoryUtil = directoryUtil;
-        _yamlUtil = yamlUtil;
     }
 
     public async ValueTask Process(CancellationToken cancellationToken = default)
@@ -70,7 +65,6 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
         if (string.IsNullOrWhiteSpace(filePath))
             throw new Exception("Sentry OpenAPI download did not produce a file path.");
 
-        await _yamlUtil.SaveAsJson(filePath, jsonFilePath, cancellationToken: cancellationToken);
         await _openApiFixer.Fix(jsonFilePath, fixedFilePath, cancellationToken);
 
         await _kiotaUtil.EnsureInstalled(cancellationToken);

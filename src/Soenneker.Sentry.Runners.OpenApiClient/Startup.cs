@@ -5,7 +5,6 @@ using Soenneker.OpenApi.Fixer.Registrars;
 using Soenneker.Sentry.Runners.OpenApiClient.Utils;
 using Soenneker.Sentry.Runners.OpenApiClient.Utils.Abstract;
 using Soenneker.Utils.File.Download.Registrars;
-using Soenneker.Utils.Yaml.Registrars;
 
 namespace Soenneker.Sentry.Runners.OpenApiClient;
 
@@ -26,7 +25,6 @@ public static class Startup
                 .AddScoped<IFileOperationsUtil, FileOperationsUtil>()
                 .AddRunnersManagerAsScoped()
                 .AddFileDownloadUtilAsScoped()
-                .AddYamlUtilAsScoped()
                 .AddKiotaUtilAsScoped()
                 .AddOpenApiFixerAsScoped();
 
